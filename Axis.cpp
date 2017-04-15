@@ -156,6 +156,7 @@ void Axis::update(void) {
     
     float pos = get_position();
     float vel = get_velocity();
+    last_vel_ = 0.5 * vel + 0.5 * last_vel_;
     
     switch (mode_) {
         case (MODE_NONE):
@@ -185,8 +186,12 @@ void Axis::update(void) {
             break;
         
         case (MODE_VEL):
-            vel_pid_.setProcessValue(vel);
+            vel_pid_.setProcessValue(last_vel_);
             cmd = vel_pid_.compute();
+            if (cmd > 0.01)
+              cmd += 0.1;
+            else if (cmd < -0.01)
+              cmd -= 0.1;
             set_motor(cmd);
             break;
         
@@ -204,7 +209,6 @@ void Axis::update(void) {
         last_cmd_ = cmd;
     
     last_pos_ = pos;
-    last_vel_ = 0.5 * vel + 0.5 * last_vel_;
     
     last_time_us_ = timer_->read_us();
 }

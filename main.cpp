@@ -92,7 +92,7 @@ void fill_sensor_packet(packet_t* pkt) {
     sensor_data->time = main_timer.read_us();
     for(int i = 0; i<2; i++) {
         sensor_data->position[i] = axes[i]->get_position();
-        sensor_data->velocity[i] = axes[i]->get_velocity();
+        sensor_data->velocity[i] = axes[i]->get_last_velocity();
         sensor_data->current[i] = axes[i]->get_current();
         sensor_data->pwm[i] = axes[i]->get_command();
     }
