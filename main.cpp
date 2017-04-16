@@ -24,12 +24,12 @@
 #define MOT_1_FB_PIN    p20
 
 #define POS_PID_P   100.0
-#define POS_PID_I   1.0
-#define POS_PID_D   0.0001
+#define POS_PID_I   5.0
+#define POS_PID_D   0.00005
 
 #define VEL_PID_P   1.0
 #define VEL_PID_I   0.1
-#define VEL_PID_D   0.00005
+#define VEL_PID_D   0.00001
 
 #define PID_RATE    0.001
 
@@ -39,8 +39,8 @@ Timer main_timer;
 #define AXIS_0_POS_MAX  (PI / 4.0)
 
 #define VEL_MAX     2.0 * PI
-#define CURR_MAX    5.0
-#define HOME_PWM    0.25
+#define CURR_MAX    8.0
+#define HOME_PWM    0.35
 
 #define AXIS_0_MOT_DIR -1.0
 #define AXIS_1_MOT_DIR 1.0

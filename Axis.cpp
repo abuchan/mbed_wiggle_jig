@@ -1,6 +1,7 @@
 #include "Axis.h"
 
-#define PWM_MAX 0.6
+#define PWM_MAX   0.8
+#define VEL_ALPHA 0.2
 
 Axis::Axis(
             PinName enc_a, PinName enc_b, PinName enc_i,
@@ -156,7 +157,7 @@ void Axis::update(void) {
     
     float pos = get_position();
     float vel = get_velocity();
-    last_vel_ = 0.5 * vel + 0.5 * last_vel_;
+    last_vel_ = VEL_ALPHA * vel + (1.0-VEL_ALPHA) * last_vel_;
     
     switch (mode_) {
         case (MODE_NONE):
@@ -176,7 +177,7 @@ void Axis::update(void) {
             break;
         
         case (MODE_POS):
-            if (abs(pos - pos_pid_.getSetPoint()) < 0.03) {
+            if (abs(pos - pos_pid_.getSetPoint()) < 0.01) {
                 cmd = 0.0;
             } else {
                 pos_pid_.setProcessValue(pos);
@@ -188,10 +189,10 @@ void Axis::update(void) {
         case (MODE_VEL):
             vel_pid_.setProcessValue(last_vel_);
             cmd = vel_pid_.compute();
-            if (cmd > 0.01)
-              cmd += 0.1;
-            else if (cmd < -0.01)
-              cmd -= 0.1;
+            if (cmd > 0.1)
+              cmd += 0.2;
+            else if (cmd < -0.1)
+              cmd -= 0.2;
             set_motor(cmd);
             break;
         
